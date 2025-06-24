@@ -1,12 +1,23 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, Response
 import uvicorn
 
-from src.routers import user_service
+from src.routers import user,auth
+from src.dependencies.database import sessionmanger
 
 app = FastAPI()
 
 
-app.include_router(user_service.user)
+app.include_router(user.user,prefix="/api/users")
+app.include_router(auth.auth,prefix="/api/users")
+
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    yield
+    if sessionmanger._engine is not None:
+        await sessionmanger.close() 
 
 
 @app.get('/welcome')
@@ -15,7 +26,6 @@ async def health_check():
 
 
 if  __name__ == "__main__" :
-    print(True)
     uvicorn.run(app,host="127.0.0.1",port=8080)
 
 

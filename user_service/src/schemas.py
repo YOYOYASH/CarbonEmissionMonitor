@@ -23,3 +23,8 @@ class DisplayUser(BaseModel):
 
 class UpdateUser(BaseModel):
     email:EmailStr
+
+
+class TokenData(BaseModel):
+    token:str
+    type:str

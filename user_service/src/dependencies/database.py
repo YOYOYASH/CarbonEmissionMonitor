@@ -8,15 +8,11 @@ from sqlalchemy.orm import declarative_base
 from config import Config   
 from urllib.parse import quote_plus
 
-# Ensure that the password is URL encoded
-if Config.DB_PASSWORD is None:
-    raise ValueError("Database password must not be None")
-
-Config.DB_PASSWORD = quote_plus(str(Config.DB_PASSWORD))
-
-SQLALCHEMY_DATABASE_URL = f"postgresql+asyncpg://{Config.DB_USER}:{Config.DB_PASSWORD}@{Config.DB_HOST}/{Config.DB_NAME}"
 
 
+SQLALCHEMY_DATABASE_URL = Config.DB_CONNECTION_STRING
+
+print(SQLALCHEMY_DATABASE_URL)
 
 Base = declarative_base()
 
